@@ -2,7 +2,6 @@ package np.com.rishabkarki.UserSystemVersion2.controller;
 
 import np.com.rishabkarki.UserSystemVersion2.dto.VerifyRequestDTO;
 import np.com.rishabkarki.UserSystemVersion2.model.TokenType;
-import np.com.rishabkarki.UserSystemVersion2.model.VerificationCode;
 import np.com.rishabkarki.UserSystemVersion2.service.VerificationCodeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

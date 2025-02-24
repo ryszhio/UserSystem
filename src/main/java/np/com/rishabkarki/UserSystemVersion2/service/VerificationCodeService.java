@@ -1,7 +1,5 @@
 package np.com.rishabkarki.UserSystemVersion2.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import np.com.rishabkarki.UserSystemVersion2.dto.VerifyRequestDTO;
 import np.com.rishabkarki.UserSystemVersion2.model.Authentication;
 import np.com.rishabkarki.UserSystemVersion2.model.TokenType;
@@ -11,7 +9,6 @@ import np.com.rishabkarki.UserSystemVersion2.repository.VerificationCodeReposito
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.Map;

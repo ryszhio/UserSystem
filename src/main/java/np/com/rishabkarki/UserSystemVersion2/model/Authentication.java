@@ -1,6 +1,5 @@
 package np.com.rishabkarki.UserSystemVersion2.model;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import np.com.rishabkarki.UserSystemVersion2.util.SnowflakeIdGenerator;
 

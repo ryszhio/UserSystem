@@ -1,9 +1,6 @@
 package np.com.rishabkarki.UserSystemVersion2.model;
 
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.Token;
-import org.springframework.cglib.core.Local;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 
 import java.time.LocalDateTime;
 
