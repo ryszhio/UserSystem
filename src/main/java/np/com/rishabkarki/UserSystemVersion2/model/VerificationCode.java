@@ -21,7 +21,7 @@ public class VerificationCode {
     private TokenType tokenType;
 
     @Column(nullable = false)
-    private boolean isExpired;
+    private Boolean isExpired;
 
     public VerificationCode() {
 

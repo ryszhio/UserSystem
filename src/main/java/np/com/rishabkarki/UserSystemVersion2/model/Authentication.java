@@ -21,7 +21,7 @@ public class Authentication {
     private UserRoles roles;
 
     @Column(nullable = false)
-    private boolean verified;
+    private Boolean verified;
 
     public Authentication() {
 
