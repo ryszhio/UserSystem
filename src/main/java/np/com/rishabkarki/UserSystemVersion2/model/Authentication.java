@@ -1,14 +1,12 @@
 package np.com.rishabkarki.UserSystemVersion2.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import np.com.rishabkarki.UserSystemVersion2.util.SnowflakeIdGenerator;
-import org.springframework.data.annotation.Id;
 
 @Entity
 public class Authentication {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1)
     private Long id;
 
     @Column(unique = true)
@@ -23,6 +21,7 @@ public class Authentication {
     @Enumerated(EnumType.STRING)
     private UserRoles roles;
 
+    @Column(nullable = false)
     private boolean verified;
 
     public Authentication() {
@@ -36,6 +35,7 @@ public class Authentication {
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.verified = false;
     }
 
     public Long getId() {

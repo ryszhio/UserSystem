@@ -2,9 +2,10 @@ package np.com.rishabkarki.UserSystemVersion2.service;
 
 import np.com.rishabkarki.UserSystemVersion2.dto.LoginRequestDTO;
 import np.com.rishabkarki.UserSystemVersion2.dto.RegisterRequestDTO;
+import np.com.rishabkarki.UserSystemVersion2.dto.VerifyRequestDTO;
 import np.com.rishabkarki.UserSystemVersion2.model.Authentication;
 import np.com.rishabkarki.UserSystemVersion2.model.UserRoles;
-import np.com.rishabkarki.UserSystemVersion2.repository.UserRepository;
+import np.com.rishabkarki.UserSystemVersion2.repository.AuthenticationRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,25 +16,28 @@ import java.util.Optional;
 
 @Service
 public class AuthenticationService {
-    //dumb
+
     private final PasswordEncoder passwordEncoder;
 
-    private final UserRepository userRepository;
+    private final AuthenticationRepository authenticationRepository;
 
-    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    private final VerificationCodeService verificationService;
+
+    public AuthenticationService(AuthenticationRepository authenticationRepository, PasswordEncoder passwordEncoder, VerificationCodeService verificationService) {
+        this.authenticationRepository = authenticationRepository;
         this.passwordEncoder = passwordEncoder;
+        this.verificationService = verificationService;
     }
 
     public ResponseEntity<Map<String, String>> register(RegisterRequestDTO registerRequestDTO) {
-        if (userRepository.existsByEmail(registerRequestDTO.email())) {
+        if (authenticationRepository.existsByEmail(registerRequestDTO.email())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
                "message",
                "Email already exists."
             ));
         }
 
-        if (userRepository.existsByUsername((registerRequestDTO.username()))) {
+        if (authenticationRepository.existsByUsername((registerRequestDTO.username()))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
                     "message",
                     "Username already exists."
@@ -47,7 +51,7 @@ public class AuthenticationService {
                 UserRoles.USER
         );
 
-        userRepository.save(user);
+        authenticationRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Registered successfully !"));
     }
@@ -55,7 +59,7 @@ public class AuthenticationService {
     public ResponseEntity<Map<String, String>> login(LoginRequestDTO loginRequestDTO) {
         Optional<Authentication> authenticationOptional;
         authenticationOptional = loginRequestDTO.email().isBlank() ?
-                userRepository.findByUsername(loginRequestDTO.username()) : userRepository.findByEmail(loginRequestDTO.email());
+                authenticationRepository.findByUsername(loginRequestDTO.username()) : authenticationRepository.findByEmail(loginRequestDTO.email());
 
         if (authenticationOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
