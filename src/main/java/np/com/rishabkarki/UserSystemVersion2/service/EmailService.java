@@ -31,7 +31,7 @@ public class EmailService {
     @Value("${smtp.port}")
     private String smtpPort;
 
-    public void sendVerificationEmail(String mailReceiver, int token) {
+    public void sendVerificationEmail(String mailReceiver, Integer token) {
         System.out.println(smtpUser);
         System.out.println(smtpPassword);
         System.out.println(smtpHost);
