@@ -1,0 +1,20 @@
+# Application Name
+spring.application.name=UserAuthenticationVersion2
+
+# Disable Auto Configuration for DataSource (since no database is configured)
+spring.datasource.url=your-data-source-username
+spring.datasource.username=your-data-source-username
+spring.datasource.password=your-data-source-password
+spring.datasource.driver-class-name=your-data-source-driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+
+# SMTP Configuration
+smtp.sender.address=your-smtp-email
+smtp.user.name=your-smtp-username
+smtp.user.password=your smtp password
+smtp.host=your-smtp-host
+smtp.port=your-smtp-port
