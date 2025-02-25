@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.validation.constraints.NotNull;
 import np.com.rishabkarki.UserSystemVersion2.model.Authentication;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Service
 public class JwtTokenGenerator {
@@ -22,9 +20,9 @@ public class JwtTokenGenerator {
 
     public String generateToken(Long id, String username, Boolean isVerified) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("isVerified", isVerified.toString());
+        claims.put("username", username);
         claims.put("id", id);
-        claims.put("username", id);
-        claims.put("isVerified", isVerified);
         return Jwts.builder()
                 .claims(claims)
                 .subject(username)
@@ -46,11 +44,11 @@ public class JwtTokenGenerator {
         return Boolean.valueOf(extractAllClaims(token).get("isVerified").toString());
     }
 
-    public Boolean validateToken(String token,@NotNull Authentication authentication) {
+    public Boolean validateToken(String token) {
         final String username = extractUsername(token);
         final Long id = extractId(token);
 
-        return (username.equals(authentication.getUsername()) && id.equals(authentication.getId()) && !isTokenExpired(token));
+        return !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

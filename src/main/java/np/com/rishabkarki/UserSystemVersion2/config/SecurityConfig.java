@@ -28,6 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/verification/generate").permitAll()
                         .requestMatchers("/api/verification/validate").permitAll()
+                        .requestMatchers("/api/token/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

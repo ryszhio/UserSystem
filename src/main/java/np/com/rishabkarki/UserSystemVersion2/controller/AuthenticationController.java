@@ -1,10 +1,13 @@
 package np.com.rishabkarki.UserSystemVersion2.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import np.com.rishabkarki.UserSystemVersion2.dto.LoginRequestDTO;
 import np.com.rishabkarki.UserSystemVersion2.dto.RegisterRequestDTO;
 import np.com.rishabkarki.UserSystemVersion2.service.AuthenticationService;
 import np.com.rishabkarki.UserSystemVersion2.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +31,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    ResponseEntity<Map<String, String>> loginUser(@RequestBody LoginRequestDTO loginRequestDTO) {
-        return authenticationService.login(loginRequestDTO);
+    ResponseEntity<Map<String, String>> loginUser(@RequestBody LoginRequestDTO loginRequestDTO, HttpServletResponse servletResponse) {
+        return authenticationService.login(loginRequestDTO, servletResponse);
+    }
+
+    @PostMapping("/logout")
+    ResponseEntity<Map<String, String>> logoutUser(HttpServletResponse servletResponse) {
+        return authenticationService.logout(servletResponse);
     }
 }
