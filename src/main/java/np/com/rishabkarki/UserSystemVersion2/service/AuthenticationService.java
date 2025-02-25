@@ -3,8 +3,8 @@ package np.com.rishabkarki.UserSystemVersion2.service;
 import jakarta.servlet.http.HttpServletResponse;
 import np.com.rishabkarki.UserSystemVersion2.dto.LoginRequestDTO;
 import np.com.rishabkarki.UserSystemVersion2.dto.RegisterRequestDTO;
-import np.com.rishabkarki.UserSystemVersion2.dto.VerifyRequestDTO;
 import np.com.rishabkarki.UserSystemVersion2.model.Authentication;
+import np.com.rishabkarki.UserSystemVersion2.model.TokenType;
 import np.com.rishabkarki.UserSystemVersion2.model.UserRoles;
 import np.com.rishabkarki.UserSystemVersion2.repository.AuthenticationRepository;
 import np.com.rishabkarki.UserSystemVersion2.util.JwtTokenGenerator;
@@ -27,10 +27,13 @@ public class AuthenticationService {
 
     private final JwtTokenGenerator jwtTokenGenerator;
 
-    public AuthenticationService(AuthenticationRepository authenticationRepository, PasswordEncoder passwordEncoder, JwtTokenGenerator jwtTokenGenerator) {
+    private final VerificationCodeService verificationCodeService;
+
+    public AuthenticationService(AuthenticationRepository authenticationRepository, PasswordEncoder passwordEncoder, JwtTokenGenerator jwtTokenGenerator, VerificationCodeService verificationCodeService) {
         this.authenticationRepository = authenticationRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenGenerator = jwtTokenGenerator;
+        this.verificationCodeService = verificationCodeService;
     }
 
     public ResponseEntity<Map<String, String>> register(RegisterRequestDTO registerRequestDTO) {
@@ -59,7 +62,7 @@ public class AuthenticationService {
 
         authenticationRepository.save(user);
 
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Registered successfully !"));
+        return verificationCodeService.generate(user.getEmail(), TokenType.EMAIL_VERIFICATION);
     }
 
     public ResponseEntity<Map<String, String>> login(LoginRequestDTO loginRequestDTO, HttpServletResponse servletResponse) {
