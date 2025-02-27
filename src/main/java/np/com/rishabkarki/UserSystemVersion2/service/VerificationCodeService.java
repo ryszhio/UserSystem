@@ -9,6 +9,7 @@ import np.com.rishabkarki.UserSystemVersion2.repository.VerificationCodeReposito
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class VerificationCodeService {
 
     private final Random random = new Random();
 
+    @Transactional
     public ResponseEntity<Map<String, String>> generate(String email, TokenType tokenType) {
         VerificationCode verificationCode = new VerificationCode(
                 email,
@@ -48,6 +50,7 @@ public class VerificationCodeService {
                 "A mail have been sent containing verification code."));
     }
 
+    @Transactional
     public ResponseEntity<Map<String, String>> validate(VerifyRequestDTO verifyRequestDTO) {
         Optional<VerificationCode> codeOptional = verificationCodeRepository.findByEmailAndToken(verifyRequestDTO.email(), verifyRequestDTO.token());
 

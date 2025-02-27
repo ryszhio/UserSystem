@@ -10,6 +10,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Properties;
 
@@ -31,6 +32,7 @@ public class EmailService {
     @Value("${smtp.port}")
     private String smtpPort;
 
+    @Transactional
     public void sendVerificationEmail(String mailReceiver, Integer token) {
         System.out.println(smtpUser);
         System.out.println(smtpPassword);

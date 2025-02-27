@@ -14,6 +14,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -36,6 +37,7 @@ public class AuthenticationService {
         this.verificationCodeService = verificationCodeService;
     }
 
+    @Transactional
     public ResponseEntity<Map<String, String>> register(RegisterRequestDTO registerRequestDTO) {
         if (authenticationRepository.existsByEmail(registerRequestDTO.email())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
@@ -65,6 +67,7 @@ public class AuthenticationService {
         return verificationCodeService.generate(user.getEmail(), TokenType.EMAIL_VERIFICATION);
     }
 
+    @Transactional
     public ResponseEntity<Map<String, String>> login(LoginRequestDTO loginRequestDTO, HttpServletResponse servletResponse) {
         Optional<Authentication> authenticationOptional;
         authenticationOptional = loginRequestDTO.email().isBlank() ?
@@ -98,15 +101,16 @@ public class AuthenticationService {
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Strict")
-                .maxAge(60 * 5)
+                .maxAge(3600 * 24)
                 .path("/")
                 .build();
 
         servletResponse.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Logged in successfully !"));
     }
-
-    public ResponseEntity<Map<String, String>> logout(HttpServletResponse response) {
+    
+    @Transactional
+    public ResponseEntity<Map<String, String>> logout(HttpServletResponse servletResponse) {
         ResponseCookie cookie = ResponseCookie.from("token", "")
                 .httpOnly(true)
                 .secure(true)
@@ -114,6 +118,8 @@ public class AuthenticationService {
                 .maxAge(0)
                 .path("/")
                 .build();
+
+        servletResponse.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         return ResponseEntity.status(HttpStatus.OK).body(Map.of(
                 "message",
