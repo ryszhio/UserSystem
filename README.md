@@ -1,2 +1,2 @@
-# UserSystemVersion2
- A rework of UserAuthenticationApi with more features and updates.
+# UserSystem
+A Spring Boot based backend app to manage user ? I created this while learning Java
